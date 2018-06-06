@@ -1,0 +1,43 @@
+Ubuntu:
+
+dpkg -L docker(查看安装软件)
+
+docker 教程(ubuntu)：
+1.docker 安装
+	apt install docker.io
+	
+
+2. docker 安装mysql
+  docker pull mysql:5.7
+              主机端口:容器端口          主机目录:docker目录
+ docker run -p 3307:3306 --name mysql5.7 -v /root/mysql:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7	
+ 
+ 登陆mysql：
+	mysql -u <root> -p -h<host> -P<port>
+	（空密码，直接回车）
+	如：mysql -u root -p -h127.0.0.1 -P3307
+	
+	
+3. docker安装redis
+  docker pull redis:3.2
+  
+  docker run -p6379:6379 --name redis3.2 -v/root/redis:/data -d redis:3.2 redis-server --appendonly yes
+
+	
+。。。。
+
+
+docker删除images
+docker rmi xxx（ids 空格）
+
+docker 运行程序：
+1.安装git: apt-get install git
+2. 根目录创建git文件夹并进入git文件夹中： mkdir git -> cd git 
+3. git clone 代码地址
+4. 安装maven: apt install maven
+5. 容器化项目(构建image)： mvn clean package -DskipTests docker:build
+6. 查看images docker images可以查看已经构建的项目image
+7. 运行容器：docker run [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...] 
+       如: docker run -p 8998:8998 -t demo-boot
+
+	
