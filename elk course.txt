@@ -1,0 +1,52 @@
+E  				L 			K
+Elasticsearch	Logstash	Kibana
+
+PS: 
+ELK的版本都是6.2.4
+ELK運行的環境是WINDOW 10
+
+1.下載ELK https://www.elastic.co/products
+2.配置ELK
+	a.elasticsearch 默认端口：9200
+		①配置elasticsearch.yaml，根據自己意願修改配置
+		②配置head,這裡選擇Chrome的擴展程序：https://github.com/mobz/elasticsearch-head
+	b.配置Kinbana.yaml, 主要是連接Elasticsearch,其他配置選項自定義，默认端口：5601
+	c.配置Logstash.conf的input/filter/output 默认端口：14560
+	  ①input plugins: https://www.elastic.co/guide/en/logstash/current/input-plugins.html,
+	  測試用了tcp作為log4j2的輸入
+	  ②filter plugin: https://www.elastic.co/guide/en/logstash/current/filter-plugins.html,
+	   測試用了Grok作為過濾，這裡重點注意一下Grok正则 pattern_dir/match
+	   1.正则列表：https://github.com/logstash-plugins/logstash-patterns-core/tree/master/patterns
+	   2.正则debugger:http://grokdebug.herokuapp.com/
+	  ③output plugin: https://www.elastic.co/guide/en/logstash/current/output-plugins.html
+	   测试使用的是elasticsearch
+	   ④完整配置
+		input {
+			tcp {
+				host => "localhost"
+				port => "14560"
+				mode => "server"
+				id => "cp-log"
+				type => "community-java-platform"
+				add_field => {
+					"name" => "Eason"
+				}
+		  }
+		}
+
+		filter {
+		 grok {
+			patterns_dir => ["D:\elk\logstash-6.2.4\config\patterns"]
+			match => { "message" => "%{SELF_DATESTAMP:log_timestamp} %{LOGLEVEL:log_level} [0-9]+\s?\-+\[.*\] %{JAVACLASS:log_class}\s*:%{JAVALOGMESSAGE:log_message}" }
+		  }
+		}
+
+		output {
+			elasticsearch {
+				hosts => ["localhost:9201"]
+				index => "cp-log-%{+YYYY.MM.dd}"
+				codec => "json"
+			}
+		}
+		仅做参考
+	  
