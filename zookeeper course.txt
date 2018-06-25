@@ -1,0 +1,28 @@
+zookeeper 集群（centos7）
+	1.下载安装zookeeper    https://www.apache.org/dyn/closer.cgi/zookeeper/
+
+
+2.上传到指定目录，并解压 
+	tar -zxvf zookeeper.x.x.tar.gz
+
+
+3.修改zoo.cfg文件
+	a.dataDir目录修改(如果不出存在，就新建此目录)
+	b.server.A=B:C:D A=[1-255] B= IP C=zookeeper与leader通信端口； D=leader挂了之后通过此端口选举
+	c.创建myid
+
+4.zookeeper常用命令
+	a. 启动ZK 服务:
+		bin/zkServer.sh start
+	b. 查看ZK 服务状态:
+		bin/zkServer.sh status
+	c. 停止ZK 服务:
+		bin/zkServer.sh stop
+	d. 重启ZK 服务:
+		bin/zkServer.sh restart
+	e. 连接服务器
+		zkCli.sh -timeout 0 -r -server ip:port
+
+5.obv		
+
+  
